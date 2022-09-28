@@ -2,6 +2,7 @@ import express from 'express';
 const controller = require('../controllers/userController');
 const router = express.Router();
 const { check } = require('express-validator');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 
 router.post('/registration', [
@@ -9,6 +10,6 @@ router.post('/registration', [
     check ('password', 'User password should be with min 4 signs').isLength({min:4})
 ], controller.registration);
 router.post('/login', controller.login);
-router.get('/users', controller.getUsers);
+router.get('/users', authMiddleware, controller.getUsers);
 
 module.exports = router;

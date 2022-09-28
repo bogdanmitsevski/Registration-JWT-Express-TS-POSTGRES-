@@ -1,7 +1,8 @@
 import express from 'express';
 const jwt = require('jsonwebtoken');
+const { user } = require ("../src/typings/express");
 class authMiddleware {
-  isAuth (req: express.Request,res: express.Response, next) {
+  isAuth (req: express.Request,res: express.Response, next:any) {
     if(req.method === "OPTIONS") {
         next();
     }
