@@ -6,6 +6,8 @@ app.use(express.json());
 const sequelize = require('./db');
 const port = process.env.PORT || 3005;
 app.use('/auth', require('./routes/userRouter'));
+
+
 const start = async () =>{
     try {
         await sequelize.authenticate();

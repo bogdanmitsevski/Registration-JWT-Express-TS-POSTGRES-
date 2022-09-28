@@ -2,7 +2,7 @@ const {User} = require('../models/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 import express from 'express';
-const {valiadationResult} = require('express-validator');
+const {validationResult} = require('express-validator');
 
 const generateAccessToken = (id:any, email:any, role:any) =>{
     const payload = {
@@ -15,10 +15,10 @@ const generateAccessToken = (id:any, email:any, role:any) =>{
 class userController {
     async registration (req:express.Request,res:express.Response) {
          try {
-            //const errors = valiadationResult(req);
-            //if(!errors.isEmpty()){
-            //return res.status(400).json({message: "Registration error", errors});
-            //}
+            const errors = validationResult(req);
+            if(!errors.isEmpty()){
+            return res.status(400).json({message: "Registration error", errors});
+            }
             const {email, password} = req.body;
             const candidate = await User.findOne({where:{email}});
             if(candidate){
@@ -37,12 +37,12 @@ class userController {
      async login (req:express.Request,res:express.Response) {
          try {
             const {email, password} = req.body;
-            const user = await User.findOne({email});
+            const user = await User.findOne({where:{email}});
             if(!user) {
                 return res.status(400).json({message: `User with ${email} not found`});
             }
             const validPassword = bcrypt.compareSync(user.password, password);
-            if(!validPassword){
+            if(validPassword){
                 return res.status(400).json({message: `Password is not correct. Please, check one time more`});
             }
 
@@ -55,7 +55,8 @@ class userController {
  
      async getUsers (req:express.Request,res:express.Response) {
          try {
-            res.json('Hello');
+            const users = await User.findAll();
+            res.json(users);
          }catch(e) {
              console.log(e);
          }
