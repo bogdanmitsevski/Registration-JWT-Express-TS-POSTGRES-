@@ -10,6 +10,6 @@ router.post('/registration', [
     check ('password', 'User password should be with min 4 signs').isLength({min:4})
 ], controller.registration);
 router.post('/login', controller.login);
-router.get('/users', authMiddleware, controller.getUsers);
+router.get('/users',  authMiddleware, controller.getUsers);
 
 module.exports = router;
